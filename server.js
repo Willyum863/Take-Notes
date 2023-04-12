@@ -9,7 +9,7 @@ const app = express();
 
 //  Static middleware pointing to the public folder
 app.use(express.static('public'));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 // Create Express.js routes for default '/', '/send' and '/routes' endpoints
@@ -33,9 +33,9 @@ app.post('/api/notes', (req, res) => {
         if (err) {
             console.log(err);
         }
-        let currentNotes = JSON.parse(data);
-        currentNotes.push(req.body);
-        fs.writeFile('./db/db.json', JSON.stringify(currentNotes), (err) => {
+        let activeNotes = JSON.parse(data);
+        activeNotes.push(req.body);
+        fs.writeFile('./db/db.json', JSON.stringify(activeNotes), (err) => {
             if (err) {
                 console.log(err);
             }
@@ -48,12 +48,12 @@ app.post('/api/notes', (req, res) => {
 app.delete('/api/notes/:id', (req, res) => {
     let notesId = parseInt(req.params.id);
 
-    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+    fs.readFile('./db/db.json','utf8', (err, data) => {
         if (err) {
             console.log(err);
         }
-        currentNotes = JSON.parse(data);
-        let newNote = currentNotes.filter(note => note.id !== notesId);
+        activeNotes = JSON.parse(data);
+        let newNote = activeNotes.filter(note => note.id !== notesId);
         fs.writeFile('./db/db.json', JSON.stringify(newNote), (err) => {
             if (err) {
                 console.log(err);
