@@ -44,7 +44,26 @@ app.post('/api/notes', (req, res) => {
     res.json();
 })
 
- // listen() method is responsible for listening for incoming connections on the specified port 
+//Create Delete route
+app.delete('/api/notes/:id', (req, res) => {
+    let notesId = parseInt(req.params.id);
+
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) {
+            console.log(err);
+        }
+        currentNotes = JSON.parse(data);
+        let newNote = currentNotes.filter(note => note.id !== notesId);
+        fs.writeFile('./db/db.json', JSON.stringify(newNote), (err) => {
+            if (err) {
+                console.log(err);
+            }
+        })
+        res.json(newNote);
+    })
+})
+
+// listen() method is responsible for listening for incoming connections on the specified port 
 app.listen(PORT, () => {
     console.log(`app listening at http://localhost:${PORT} `);
 });
